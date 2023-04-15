@@ -1,4 +1,4 @@
-package com.example.projetoicc2;
+package com.example.projetoicc2.info;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,12 +9,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.projetoicc2.MapsActivity;
+import com.example.projetoicc2.R;
+
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 
 public class InfoActivity extends AppCompatActivity {
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,16 @@ public class InfoActivity extends AppCompatActivity {
         Element versionElement = new Element();
         versionElement.setTitle("Versão 1.0");
 
+        Element map = new Element();
+        map.setTitle("Como chegar");
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(InfoActivity.this, MapsActivity.class);
+                startActivity(intent);
+            }
+        });
+
         View aboutPage = new AboutPage(this)
                 .setDescription("A igreja de Cristo no Cajuru é uma congregação fiel e firme na palavra.\n" +
                         "A igreja foi edificada por Cristo no ano de 33 d.C. Seguindo os ensinamentos do " +
@@ -56,6 +67,9 @@ public class InfoActivity extends AppCompatActivity {
                 .addGroup("Redes Sociais")
                 .addFacebook("Igrejacajuru", "Facebook")
                 .addYoutube("igrejadeCristo33ad/", "Youtube")
+
+                .addGroup("")
+                .addItem(map)
 
                 .addItem(versionElement)
                 .create();
