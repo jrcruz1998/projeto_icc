@@ -2,6 +2,7 @@ package com.example.projetoicc2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -10,6 +11,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.projetoicc2.databinding.ActivityMapsBinding
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.LatLngBounds
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -35,15 +38,28 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
         mapFragment.getMapAsync { googleMap ->
             addMarkers(googleMap)
+
+            googleMap.setOnMapLoadedCallback {
+                val bounds = LatLngBounds.builder()
+
+                places.forEach {
+                    bounds.include(it.latLng)
+                }
+
+                    googleMap.moveCamera((CameraUpdateFactory.newLatLng(LatLng(-25.444811843916582, -49.23031524232814))))
+                    googleMap.moveCamera(CameraUpdateFactory.zoomTo(15F));
+            }
         }
     }
 
     private fun addMarkers(googleMap: GoogleMap) {
         places.forEach { place ->
             val marker = googleMap.addMarker(MarkerOptions()
-                .title(place.name)
-                .snippet(place.address)
+                .title(place.name) // Título que tem no pin
+                .snippet(place.address)  // Enderoço do pin
                 .position(place.latLng))
+                //trocar o pin por outro vector asset
+                //?.setIcon(BitmapHelper.vectorToBitmap(this, R.drawable.ic_flag, ContextCompat.getColor(this, R.color.black)))
         }
     }
 
@@ -52,6 +68,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val latLng: LatLng,
         val address: String,
     )
+
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
